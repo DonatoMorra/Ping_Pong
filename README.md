@@ -1,93 +1,86 @@
-# 🏆 BEERPONG CHAMPIONS - Beer Pong Tournament Manager
+# 🏆 BEERPONG CHAMPIONS - Tournament Manager Professional
 
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-**BEERPONG CHAMPIONS** è un'applicazione web moderna e robusta progettata per la gestione completa di tornei di Beer Pong. Dalla creazione delle squadre alla generazione automatica dei round fino alla proclamazione del campione, questo strumento semplifica ogni aspetto dell'organizzazione.
+**BEERPONG CHAMPIONS** è un'applicazione web professionale progettata per la gestione completa di tornei di Beer Pong. Caratterizzata da un design **Premium Glassmorphism**, offre un'esperienza utente fluida, sicura e moderna.
 
 ---
 
-## 🚀 Funzionalità Principali
+## 🚀 Funzionalità Esclusive
 
-- **⚔️ Gestione Squadre**: Crea squadre personalizzate e assegna giocatori (massimo 2 per team).
-- **📊 Struttura a Gironi**: Supporta fino a 4 gironi distinti per una fase a gruppi organizzata.
-- **🎲 Generazione Automatica Match**: Algoritmo intelligente per generare round di partite casuali all'interno dei gironi.
-- **🍺 Registro Partite**: Interfaccia intuitiva per inserire i punteggi in tempo reale.
-- **🏆 Classifica Dinamica**: Tabella dei leader aggiornata istantaneamente con punti, vittorie e statistiche.
-- **⚡ Progression Tournament**: Sistema fluido per passare dai gironi alle fasi finali (Semifinali e Finalissima).
-- **🗑️ Reset Totale**: Funzione di pulizia rapida per iniziare un nuovo torneo in pochi secondi.
+- **🔐 Sicurezza Admin**: Area protetta da credenziali per la gestione di squadre, punteggi e reset del torneo.
+- **📱 QR Code & Live View**: Generazione automatica di un QR Code per permettere ai partecipanti di seguire la classifica in tempo reale dai propri smartphone (modalità sola lettura).
+- **⚔️ Algoritmo di Matchmaking**: Generazione automatica di round bilanciati basati sulle prestazioni delle squadre.
+- **🔥 Progression Dinamica**: Gestione automatica del passaggio dai Gironi alle **Semifinali** e alla **Finalissima**.
+- **🎭 Design Premium**: Interfaccia responsiva con micro-animazioni, modalità dark-mode adaptive e layout moderno.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Backend
-- **Java 21**: Utilizzo delle ultime feature del linguaggio.
-- **Spring Boot 3/4**: Framework core per l'architettura RESTful.
-- **Spring Data JPA**: Per la persistenza dei dati su database relazionale.
-- **MySQL**: Database affidabile per la memorizzazione di squadre, giocatori e match.
-- **Lombok**: Per ridurre il codice boilerplate.
+### Backend & Database
+- **Java 21** & **Spring Boot 3**.
+- **Spring Security**: Protezione degli endpoint e gestione accessi.
+- **MySQL 8**: Database relazionale per la persistenza dei dati.
 
 ### Frontend
-- **HTML5 & Vanilla JS**: Logica frontend reattiva e veloce.
-- **Bootstrap 5**: Design responsivo e moderno con componenti premium.
-- **CSS3 Custom**: Styling avanzato con effetti di glassmorphism e micro-animazioni.
-
-### DevOps
-- **Docker & Docker Compose**: Containerizzazione completa per un deployment immediato in qualsiasi ambiente.
+- **Vanilla JS & HTML5**: Logica reattiva senza dipendenze pesanti.
+- **Bootstrap 5**: Struttura responsiva.
+- **Animate.css**: Animazioni fluide per gli eventi del torneo.
 
 ---
 
 ## 📦 Installazione e Avvio
 
-### Requisiti
-- [Docker](https://www.docker.com/) e Docker Compose installati.
-- In alternativa: Java 21+ e MySQL 8.
+### 🐳 Avvio rapido con Docker (Consigliato)
 
-### Avvio rapido con Docker (Consigliato)
-
-1. Clona la repository:
+1. **Clona la repository**:
    ```bash
    git clone https://github.com/DonatoMorra/Beer_Pong.git
    cd Beer_Pong
    ```
 
-2. Configura le variabili d'ambiente (opzionale):
-   Assicurati che il file `.env` contenga le credenziali corrette per il database.
-
-3. Avvia i container:
-   ```bash
-   docker-compose up --build
+2. **Configura la Password Admin**:
+   Crea o modifica il file `.env` nella root del progetto:
+   ```env
+   ADMIN_PASSWORD=la_tua_password_segreta
+   MYSQL_ROOT_PASSWORD=root
    ```
 
-4. Accedi all'applicazione:
-   Apri il browser su `http://localhost:8080`
+3. **Avvia i container**:
+   ```bash
+   docker-compose up --build -d
+   ```
+
+4. **Accedi all'app**:
+   - **Main App**: [http://localhost:8081](http://localhost:8081)
+   - **Login Default**: User: `admin` | Pass: `roccadaspideBeer` (se non cambiata nel .env)
 
 ---
 
-## 📖 Come Utilizzare
+## 📖 Guida all'Uso
 
-1. **Creazione**: Vai nella tab "Squadre" e aggiungi i partecipanti. Ogni squadra può avere fino a 2 giocatori.
-2. **Gironi**: Assegna le squadre a uno dei 4 gironi disponibili.
-3. **Round**: Clicca su "GENERA ROUND 1" per creare i primi scontri.
-4. **Risultati**: Nella tab "Partite", seleziona lo scontro e inserisci i punti. Clicca su "REGISTRA MATCH".
-5. **Classifica**: Monitora l'andamento del torneo nella tab "Classifica".
-6. **Fase Finale**: Una volta conclusi i gironi, genera le fasi finali fino alla 🏆 **FINALISSIMA**.
+1. **Setup**: Accedi all'area Admin, crea le squadre e assegnale ai gironi.
+2. **Torneo**: Genera i round iniziali. Registra i risultati match dopo match.
+3. **Pubblico**: Condividi il QR Code generato nella dashboard per permettere a tutti di vedere la classifica aggiornata (senza poter modificare nulla).
+4. **Fase Finale**: Il sistema rileverà automaticamente la fine dei gironi e ti proporrà di generare Semifinali e Finalissima.
 
 ---
 
 ## 🤝 Contributi
 
-I contributi sono sempre benvenuti! Se hai suggerimenti per nuove funzionalità o bug da segnalare, apri una *Issue* o invia una *Pull Request*.
+Se vuoi migliorare BeerPong Champions, sentiti libero di aprire una Pull Request o segnalare un bug nelle Issue!
 
 ---
 
 ## 👤 Autore
 
-- **Donato Morra** - [GitHub](https://github.com/DonatoMorra)
+- **Donato Morra** - [GitHub Profile](https://github.com/DonatoMorra)
 
 ---
 
-> Progetto realizzato per rendere ogni torneo di Beer Pong un evento leggendario! 🍻🏓
+> Progetto realizzato per elevare ogni torneo di Beer Pong ad un livello competitivo e professionale! 🍻🏓🏆

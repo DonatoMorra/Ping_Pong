@@ -34,6 +34,11 @@ public class SquadreController {
         return "localhost";
     }
 
+    @GetMapping("/auth/check")
+    public org.springframework.http.ResponseEntity<String> checkAuth() {
+        return org.springframework.http.ResponseEntity.ok("Authenticated");
+    }
+
     @GetMapping
     public List<Squadra> getAll() {
         return squadreService.findAll();

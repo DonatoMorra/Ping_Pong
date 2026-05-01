@@ -21,8 +21,7 @@
                 <h1 class="display-5 fw-bold m-0">BEERPONG <span class="text-warning">CHAMPIONS</span></h1>
                 <p class="text-muted m-0">Torneo Beer Pong </p>
             </div>
-            <button class="btn btn-outline-danger fw-bold rounded-3" onclick="openModal('deleteAllModal')">🗑️ RESET
-                TORNEO</button>
+            <button id="header-reset-btn" class="btn btn-outline-danger fw-bold rounded-3 d-none" onclick="openModal('deleteAllModal')">🗑️ RESET TORNEO</button>
         </header>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-5 shadow-sm mb-5 px-4 py-3 border">
@@ -35,20 +34,19 @@
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul class="navbar-nav gap-3">
                         <li class="nav-item">
-                            <button class="nav-link active fw-bold btn btn-light rounded-pill px-4"
-                                onclick="switchTab('squadre')">⚔️ Squadre</button>
+                            <button class="nav-link fw-bold btn btn-light rounded-pill px-4" onclick="switchTab('classifica')">🏆 Classifica</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link fw-bold btn btn-light rounded-pill px-4"
-                                onclick="switchTab('classifica')">🏆 Classifica</button>
+                            <button class="nav-link fw-bold btn btn-light rounded-pill px-4" onclick="switchTab('live')">⚔️ In Campo</button>
                         </li>
-                        <li class="nav-item">
-                            <button class="nav-link fw-bold btn btn-light rounded-pill px-4"
-                                onclick="switchTab('live')">⚔️ In Campo</button>
+                        <li class="nav-item" id="nav-squadre-container">
+                            <button class="nav-link fw-bold btn btn-light rounded-pill px-4" onclick="switchTab('squadre')">👥 Squadre</button>
                         </li>
-                        <li class="nav-item">
-                            <button class="nav-link fw-bold btn btn-light rounded-pill px-4"
-                                onclick="switchTab('partite')">🍺 Partite</button>
+                        <li class="nav-item" id="nav-partite-container">
+                            <button class="nav-link fw-bold btn btn-light rounded-pill px-4" onclick="switchTab('partite')">🎯 Partite</button>
+                        </li>
+                        <li class="nav-item ms-lg-4">
+                            <button id="nav-admin" class="btn btn-primary fw-bold rounded-pill px-4 shadow-sm" onclick="switchTab('admin')">🔐 LOGIN</button>
                         </li>
                     </ul>
                 </div>
@@ -56,30 +54,84 @@
         </nav>
 
         <div class="main-card shadow-sm p-4 p-md-5 bg-white rounded-5">
-            <div id="tab-squadre" class="tab-content active">
-                <div class="row justify-content-center mb-5">
-                    <div class="col-md-10">
-                        <div class="p-4 border rounded-4 bg-light shadow-sm">
-                            <div class="row g-3 align-items-center">
-                                <div class="col-md-8">
-                                    <label class="fw-bold mb-2">Nuova Squadra</label>
-                                    <div class="input-group">
-                                        <input type="text" id="teamName" class="form-control"
-                                            placeholder="Nome Squadra..."
-                                            onkeydown="if(event.key==='Enter') createTeam()">
-                                        <select id="teamGirone" class="form-select" style="max-width: 120px;">
-                                            <option value="1">Girone 1</option>
-                                            <option value="2">Girone 2</option>
-                                            <option value="3">Girone 3</option>
-                                            <option value="4">Girone 4</option>
-                                        </select>
-                                        <button class="btn btn-primary px-4 fw-bold"
-                                            onclick="createTeam()">AGGIUNGI</button>
+            
+            <!-- AREA ADMIN (Protetto da Login) -->
+            <div id="tab-admin" class="tab-content" style="display:none;">
+                <!-- Sezione Login (visibile solo se non loggato) -->
+                <div id="admin-login-section" class="text-center py-5">
+                    <div class="main-card p-5 d-inline-block shadow-lg border-0" style="max-width: 400px;">
+                        <div class="mb-4">
+                            <span class="display-4">🔐</span>
+                            <h2 class="h4 fw-bold mt-3">Accesso Riservato</h2>
+                            <p class="text-muted small">Inserisci le credenziali per gestire il torneo</p>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" id="loginUser" class="form-control rounded-pill px-4 py-3" placeholder="Username">
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" id="loginPass" class="form-control rounded-pill px-4 py-3" placeholder="Password">
+                        </div>
+                        <button class="btn btn-primary w-100 fw-bold rounded-pill py-3 shadow" onclick="attemptLogin()">ENTRA NELL'AREA ADMIN</button>
+                    </div>
+                </div>
+
+                <!-- Controlli Admin (visibili solo se loggato) -->
+                <div id="admin-controls-section" style="display:none;" class="text-center py-5">
+                    <div class="main-card p-5 d-inline-block shadow-lg border-0" style="max-width: 500px; width: 100%;">
+                        <div class="mb-4">
+                            <span class="display-4">⚙️</span>
+                            <h2 class="h4 fw-bold mt-3 text-success">Pannello Controllo</h2>
+                            <p class="text-muted small">Usa la barra di navigazione in alto per gestire Squadre e Punteggi.</p>
+                        </div>
+                        
+                        <div class="card border-0 shadow-sm rounded-5 p-4 mt-4 bg-light">
+                            <h5 class="fw-bold mb-3">🚀 Fase Successiva</h5>
+                            <div id="admin-next-round-btn-container">
+                                <button class="btn btn-warning w-100 fw-bold rounded-pill py-3 shadow-sm" id="btnNextRoundAdmin" onclick="generateRandomMatches()">🚀 PROSSIMO ROUND</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card border-danger bg-danger bg-opacity-10 rounded-4 p-4 mt-4 text-center">
+                            <h5 class="fw-bold text-danger mb-3">Zona Pericolo</h5>
+                            <button class="btn btn-danger w-100 fw-bold rounded-pill py-3 shadow-sm mb-3" onclick="openModal('deleteAllModal')">🗑️ RESET TOTALE TORNEO</button>
+                        </div>
+                        
+                        <button class="btn btn-outline-secondary w-100 fw-bold rounded-pill py-3 shadow-sm mt-4" onclick="logout()">🔒 Esci (Logout)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB SQUADRE (Ora secondario, gestito dall'admin) -->
+            <div id="tab-squadre" class="tab-content" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h4 fw-bold m-0">⚔️ Gestione Squadre</h2>
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="switchTab('admin')">🔙 Indietro</button>
+                </div>
+                <div class="main-card p-4 p-md-5 mb-5">
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-md-10">
+                            <div class="p-4 border rounded-4 bg-light shadow-sm">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-8">
+                                        <label class="fw-bold mb-2">Nuova Squadra</label>
+                                        <div class="input-group">
+                                            <input type="text" id="teamName" class="form-control"
+                                                placeholder="Nome Squadra..."
+                                                onkeydown="if(event.key==='Enter') createTeam()">
+                                            <select id="teamGirone" class="form-select" style="max-width: 120px;">
+                                                <option value="1">Girone 1</option>
+                                                <option value="2">Girone 2</option>
+                                                <option value="3">Girone 3</option>
+                                                <option value="4">Girone 4</option>
+                                            </select>
+                                            <button class="btn btn-primary px-4 fw-bold"
+                                                onclick="createTeam()">AGGIUNGI</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4 text-md-end pt-3 pt-md-4" id="initial-gen-container">
-                                    <button class="btn btn-success fw-bold w-100" onclick="generateRandomMatches()">🎲
-                                        AVVIA TORNEO</button>
+                                    <div class="col-md-4 text-md-end pt-3 pt-md-4" id="initial-gen-container">
+                                        <button class="btn btn-success fw-bold w-100" onclick="generateRandomMatches()">🎲
+                                            AVVIA TORNEO</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -117,13 +169,13 @@
                     </div>
                 </div>
 
-                <div id="final-section"
-                    class="mt-5 p-4 border border-warning rounded-5 bg-warning bg-opacity-10 text-center"
-                    style="display:none;">
-                    <h2 class="h3 fw-bold text-warning mb-3">🏆 FINALISSIMA 🏆</h2>
-                    <div id="final-match-display" class="d-flex justify-content-center align-items-center gap-4">
-                        <!-- Qui comparirà il match finale -->
-                    </div>
+            </div>
+
+            <!-- SEZIONE FINALISSIMA (Spostata qui per essere visibile a tutti) -->
+            <div id="final-section" class="mb-5 p-4 border border-warning rounded-5 bg-warning bg-opacity-10 text-center shadow-lg animate__animated animate__pulse animate__infinite" style="display:none; border-width: 3px !important;">
+                <h2 class="h3 fw-bold text-warning mb-3">🏆 FINALISSIMA IN CORSO 🏆</h2>
+                <div id="final-match-display" class="d-flex justify-content-center align-items-center gap-4">
+                    <!-- Qui comparirà il match finale -->
                 </div>
             </div>
 

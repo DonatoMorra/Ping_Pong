@@ -19,17 +19,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disabilitato per semplicita' in questo progetto locale
-            .authorizeHttpRequests(auth -> auth
-                // Permetti a TUTTI di vedere la pagina principale e i dati (Classifica)
-                .requestMatchers("/", "/index.html", "/script.js", "/style.css", "/favicon.ico").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/squadre/**").permitAll()
-                // Proteggi TUTTE le operazioni di modifica (POST, DELETE, PUT)
-                .anyRequest().authenticated()
-            )
-            .httpBasic(Customizer.withDefaults())
-            .formLogin(Customizer.withDefaults());
-            
+                .csrf(csrf -> csrf.disable()) // Disabilitato per semplicita' in questo progetto locale
+                .authorizeHttpRequests(auth -> auth
+                        // Permetti a TUTTI di vedere la pagina principale e i dati (Classifica)
+                        .requestMatchers("/", "/index.html", "/script.js", "/style.css", "/favicon.ico").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/squadre/**").permitAll()
+                        // Proteggi TUTTE le operazioni di modifica (POST, DELETE, PUT)
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults());
+
         return http.build();
     }
 

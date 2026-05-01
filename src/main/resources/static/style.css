@@ -243,3 +243,11 @@ body {
     font-size: 0.6rem !important;
     padding: 0.2rem 0.5rem !important;
 }
+
+.tracking-widest {
+    letter-spacing: 0.2em;
+}
+
+.border-warning {
+    border-color: var(--primary) !important;
+}

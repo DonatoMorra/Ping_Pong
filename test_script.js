@@ -61,10 +61,7 @@ async function createTeam() {
 
     const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': window.authHeader || ''
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTeam)
     });
 
@@ -86,10 +83,7 @@ function openDeleteSingleModal(id) {
 }
 
 async function confirmDeleteSingle() {
-    const response = await fetch(`${API_URL}/${activeTeamId}`, { 
-        method: 'DELETE',
-        headers: { 'Authorization': window.authHeader || '' }
-    });
+    const response = await fetch(`${API_URL}/${activeTeamId}`, { method: 'DELETE' });
     if (response.status === 401) {
         showNotify("🔒 Accesso Negato", "Password admin necessaria!", "danger");
         return;
@@ -99,10 +93,7 @@ async function confirmDeleteSingle() {
 }
 
 async function confirmDeleteAll() {
-    const response = await fetch(`${API_URL}/all`, { 
-        method: 'DELETE',
-        headers: { 'Authorization': window.authHeader || '' }
-    });
+    const response = await fetch(`${API_URL}/all`, { method: 'DELETE' });
     if (response.status === 401) {
         showNotify("🔒 Accesso Negato", "Password admin necessaria!", "danger");
         return;
@@ -127,10 +118,7 @@ async function confirmPoints() {
     const pts = parseInt(document.getElementById('pointsInput').value) || 0;
     await fetch(`${API_URL}/${activeTeamId}/punti`, {
         method: 'PUT',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': window.authHeader || ''
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pts)
     });
     closeModal('pointsModal');
@@ -161,10 +149,7 @@ async function addPlayer() {
     team.giocatori.push({ nome: name });
     await fetch(API_URL, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': window.authHeader || ''
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(team)
     });
     input.value = '';
@@ -177,10 +162,7 @@ async function removePlayer(index) {
     team.giocatori.splice(index, 1);
     await fetch(API_URL, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': window.authHeader || ''
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(team)
     });
     renderPlayersList();
@@ -269,25 +251,20 @@ function renderTeams() {
             btnInitial.style.display = 'none';
         }
 
-        // Testo tasto in tab Partite e Admin
-        const btnAdmin = document.getElementById('btnNextRoundAdmin');
-        
-        const updateBtn = (btn) => {
-            if (!btn) return;
+        // Testo tasto in tab Partite
+        const btnNext = document.getElementById('btnNextRound');
+        if (btnNext) {
             if (activeTeams.length === 2) {
-                btn.innerHTML = "🏆 GENERA FINALISSIMA";
-                btn.className = "btn btn-danger btn-lg fw-bold rounded-pill px-5 shadow w-100";
+                btnNext.innerHTML = "🏆 GENERA FINALISSIMA";
+                btnNext.className = "btn btn-danger btn-lg fw-bold rounded-pill px-5 shadow";
             } else if (activeTeams.length <= 4) {
-                btn.innerHTML = "🔥 GENERA SEMIFINALI";
-                btn.className = "btn btn-primary btn-lg fw-bold rounded-pill px-5 shadow w-100";
+                btnNext.innerHTML = "🔥 GENERA SEMIFINALI";
+                btnNext.className = "btn btn-primary btn-lg fw-bold rounded-pill px-5 shadow";
             } else {
-                btn.innerHTML = "🚀 PROSSIMO ROUND";
-                btn.className = "btn btn-warning btn-lg fw-bold rounded-pill px-5 shadow w-100";
+                btnNext.innerHTML = "🚀 PROSSIMO ROUND";
+                btnNext.className = "btn btn-warning btn-lg fw-bold rounded-pill px-5 shadow";
             }
-        };
-
-        updateBtn(btnNext);
-        updateBtn(btnAdmin);
+        }
     });
 
     checkForFinal();
@@ -374,10 +351,7 @@ async function createBalancedMatches(squadre, gironeNum) {
             };
             const response = await fetch(`${API_URL}/partite/nuova`, {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': window.authHeader || ''
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(partita)
             });
             if (response.status === 401) {
@@ -537,18 +511,15 @@ function switchTab(tab) {
             .then(data => {
                 allPartite = data;
                 renderLiveMatches();
-            }).catch(e => console.error("Errore live:", e));
+            });
     }
-    if (tab === 'admin') updateAdminView();
+    if (tab === 'admin') {
+        updateAdminView();
+    }
     if (tab === 'partite') {
         loadPartite();
         populateTeamSelects();
     }
-    if (tab === 'squadre') {
-        loadTeams();
-    }
-
-    window.scrollTo(0,0);
 }
 
 async function loadPartite() {
@@ -682,7 +653,7 @@ async function saveMatch() {
 
     const activeTeams = teams.filter(t => t.sconfitte < 2);
     let finalGirone = team1.girone;
-    if (activeTeams.length === 2) finalGirone = 99; // Forza girone 99 (Finalissima) quando restano in 2
+    if (activeTeams.length === 2) finalGirone = 4; // Forza girone finale se sono rimasti in 2
 
     const partita = {
         id: activeMatchId,
@@ -696,10 +667,7 @@ async function saveMatch() {
 
     const response = await fetch(`${API_URL}/partite`, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': window.authHeader || ''
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(partita)
     });
 
@@ -788,16 +756,10 @@ function updateAdminView() {
     const loginSection = document.getElementById('admin-login-section');
     const controlsSection = document.getElementById('admin-controls-section');
     const navAdmin = document.getElementById('nav-admin');
-    const navSquadre = document.getElementById('nav-squadre-container');
-    const navPartite = document.getElementById('nav-partite-container');
-    const headerReset = document.getElementById('header-reset-btn');
 
     if (isLoggedIn) {
         if (loginSection) loginSection.style.display = 'none';
         if (controlsSection) controlsSection.style.display = 'block';
-        if (navSquadre) navSquadre.classList.remove('d-none');
-        if (navPartite) navPartite.classList.remove('d-none');
-        if (headerReset) headerReset.classList.remove('d-none');
         if (navAdmin) {
             navAdmin.innerHTML = "⚙️ ADMIN";
             navAdmin.classList.replace('btn-primary', 'btn-success');
@@ -805,9 +767,6 @@ function updateAdminView() {
     } else {
         if (loginSection) loginSection.style.display = 'block';
         if (controlsSection) controlsSection.style.display = 'none';
-        if (navSquadre) navSquadre.classList.add('d-none');
-        if (navPartite) navPartite.classList.add('d-none');
-        if (headerReset) headerReset.classList.add('d-none');
         if (navAdmin) {
             navAdmin.innerHTML = "🔐 LOGIN";
             navAdmin.classList.replace('btn-success', 'btn-primary');
