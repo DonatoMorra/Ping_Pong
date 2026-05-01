@@ -3,7 +3,7 @@ services:
     image: mysql:8.0
     container_name: mysql_db
     environment:
-      MYSQL_DATABASE: PingPong
+      MYSQL_DATABASE: BeerPong
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3307:3306"
@@ -15,13 +15,13 @@ services:
 
   app:
     build: .
-    container_name: ping_pong_champion
+    container_name: beer_pong_champion
     ports:
       - "8081:8081"
     depends_on:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/PingPong?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/BeerPong?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ""

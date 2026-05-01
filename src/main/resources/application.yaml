@@ -1,10 +1,10 @@
 spring:
   application:
-    name: PingPong
+    name: BeerPong
 
 # Configurazione Database
   datasource:
-    url: jdbc:mysql://db:3306/PingPong?createDatabaseIfNotExist=true
+    url: jdbc:mysql://db:3306/BeerPong?createDatabaseIfNotExist=true
     username: root
     password: ""
     driver-class-name: com.mysql.cj.jdbc.Driver
