@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Manager | Spring Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+
+    <div class="container py-5">
+        <header class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h1 class="display-5 fw-bold m-0">PINKPONK <span class="text-warning">CHAMPIONS</span></h1>
+                <p class="text-muted m-0">Torneo Beer Pong </p>
+            </div>
+            <button class="btn btn-outline-danger fw-bold rounded-3" onclick="openDeleteAllModal()">🗑️ RESET
+                TORNEO</button>
+        </header>
+
+        <ul class="nav nav-pills justify-content-center mb-5" id="mainTabs">
+            <li class="nav-item">
+                <button class="nav-link active" onclick="switchTab('squadre')">⚔️ Squadre</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('classifica')">🏆 Classifica</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('partite')">🍺 Partite</button>
+            </li>
+        </ul>
+
+        <div class="main-card shadow-sm p-4 p-md-5 bg-white rounded-5">
+            <div id="tab-squadre" class="tab-content active">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-md-10">
+                        <div class="p-4 border rounded-4 bg-light shadow-sm">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-md-8">
+                                    <label class="fw-bold mb-2">Nuova Squadra</label>
+                                    <div class="input-group">
+                                        <input type="text" id="teamName" class="form-control"
+                                            placeholder="Nome Squadra..."
+                                            onkeydown="if(event.key==='Enter') createTeam()">
+                                        <select id="teamGirone" class="form-select" style="max-width: 120px;">
+                                            <option value="1">Girone 1</option>
+                                            <option value="2">Girone 2</option>
+                                            <option value="3">Girone 3</option>
+                                            <option value="4">Girone 4</option>
+                                        </select>
+                                        <button class="btn btn-primary px-4 fw-bold"
+                                            onclick="createTeam()">AGGIUNGI</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-md-end pt-3 pt-md-4" id="initial-gen-container">
+                                    <button class="btn btn-success fw-bold w-100" onclick="generateRandomMatches()">🎲
+                                        GENERA ROUND 1</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="h6 fw-bold text-primary m-0">GIRONE 1</h4>
+                            <span class="badge bg-primary rounded-pill" id="count-g1">0</span>
+                        </div>
+                        <div id="list-girone1"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="h6 fw-bold text-info m-0">GIRONE 2</h4>
+                            <span class="badge bg-info rounded-pill" id="count-g2">0</span>
+                        </div>
+                        <div id="list-girone2"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="h6 fw-bold text-success m-0">GIRONE 3</h4>
+                            <span class="badge bg-success rounded-pill" id="count-g3">0</span>
+                        </div>
+                        <div id="list-girone3"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="h6 fw-bold text-warning m-0">GIRONE 4</h4>
+                            <span class="badge bg-warning rounded-pill" id="count-g4">0</span>
+                        </div>
+                        <div id="list-girone4"></div>
+                    </div>
+                </div>
+
+                <div id="final-section"
+                    class="mt-5 p-4 border border-warning rounded-5 bg-warning bg-opacity-10 text-center"
+                    style="display:none;">
+                    <h2 class="h3 fw-bold text-warning mb-3">🏆 FINALISSIMA 🏆</h2>
+                    <div id="final-match-display" class="d-flex justify-content-center align-items-center gap-4">
+                        <!-- Qui comparirà il match finale -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-classifica" class="tab-content" style="display:none;">
+                <h2 class="h4 fw-bold mb-4 text-center">Classifica Generale</h2>
+                <div id="leaderboard-list"></div>
+            </div>
+
+            <div id="tab-partite" class="tab-content" style="display:none;">
+                <h2 class="h4 fw-bold mb-4 text-center">Registra Risultato</h2>
+
+                <div class="match-registration-card p-4 p-md-5 border rounded-5 bg-white shadow-lg mb-5">
+                    <div class="row g-4 align-items-center">
+                        <!-- Squadra 1 -->
+                        <div class="col-md-5 text-center">
+                            <label class="form-label fw-bold text-muted small text-uppercase">Squadra 1</label>
+                            <select id="matchTeam1"
+                                class="form-select form-select-lg border-0 bg-light rounded-4 mb-3 text-center fw-bold"></select>
+                            <div class="d-flex justify-content-center align-items-center gap-3">
+                                <button class="btn btn-outline-secondary rounded-circle btn-lg"
+                                    onclick="adjustScore('matchScore1', -1)">-</button>
+                                <input type="number" id="matchScore1"
+                                    class="form-control form-control-lg text-center fw-bold border-0 bg-transparent"
+                                    value="0" style="max-width: 80px; font-size: 2rem;">
+                                <button class="btn btn-outline-secondary rounded-circle btn-lg"
+                                    onclick="adjustScore('matchScore1', 1)">+</button>
+                            </div>
+                        </div>
+
+                        <!-- VS Divider -->
+                        <div class="col-md-2 text-center py-3">
+                            <div class="vs-circle mx-auto bg-warning text-white fw-bold d-flex align-items-center justify-content-center shadow-sm"
+                                style="width: 50px; height: 50px; border-radius: 50%;">VS</div>
+                        </div>
+
+                        <!-- Squadra 2 -->
+                        <div class="col-md-5 text-center">
+                            <label class="form-label fw-bold text-muted small text-uppercase">Squadra 2</label>
+                            <select id="matchTeam2"
+                                class="form-select form-select-lg border-0 bg-light rounded-4 mb-3 text-center fw-bold"></select>
+                            <div class="d-flex justify-content-center align-items-center gap-3">
+                                <button class="btn btn-outline-secondary rounded-circle btn-lg"
+                                    onclick="adjustScore('matchScore2', -1)">-</button>
+                                <input type="number" id="matchScore2"
+                                    class="form-control form-control-lg text-center fw-bold border-0 bg-transparent"
+                                    value="0" style="max-width: 80px; font-size: 2rem;">
+                                <button class="btn btn-outline-secondary rounded-circle btn-lg"
+                                    onclick="adjustScore('matchScore2', 1)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <button class="btn btn-warning btn-lg w-100 fw-bold rounded-4 shadow-sm py-3"
+                                onclick="saveMatch()">
+                                🍺 REGISTRA MATCH 🍺
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="h5 fw-bold m-0">PROSSIME PARTITE</h4>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-warning btn-sm fw-bold px-3 shadow-sm" id="btnNextRound"
+                            onclick="generateRandomMatches()">🚀 PROSSIMO ROUND</button>
+                        <span class="badge bg-secondary rounded-pill d-flex align-items-center"
+                            id="upcoming-count">0</span>
+                    </div>
+                </div>
+                <div id="upcoming-list" class="row g-3 mb-5"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="h5 fw-bold m-0">STORICO PARTITE</h4>
+                    <span class="text-muted small" id="match-count">0 match registrati</span>
+                </div>
+                <div id="match-list" class="row g-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="playerModal" class="custom-modal" style="display:none;">
+        <div class="modal-dialog-custom p-4">
+            <h4 class="fw-bold mb-1">Squadra: <span id="playerModalTeamName" class="text-primary"></span></h4>
+            <div id="playerList" class="my-3 list-group border rounded-3"></div>
+            <div class="input-group mb-3">
+                <input type="text" id="playerNameInput" class="form-control" placeholder="Nuovo utente...">
+                <button class="btn btn-dark" onclick="addPlayer()">Aggiungi</button>
+            </div>
+            <button class="btn btn-outline-secondary w-100" onclick="closeModal('playerModal')">Chiudi</button>
+        </div>
+    </div>
+
+    <div id="pointsModal" class="custom-modal" style="display:none;">
+        <div class="modal-dialog-custom p-4">
+            <h4 class="fw-bold mb-3 text-center">🎯 Aggiorna Punti</h4>
+            <input type="number" id="pointsInput" class="form-control form-control-lg mb-4 text-center fw-bold">
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary w-100 fw-bold" onclick="confirmPoints()">SALVA</button>
+                <button class="btn btn-light border w-100" onclick="closeModal('pointsModal')">ANNULLA</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteAllModal" class="custom-modal" style="display:none;">
+        <div class="modal-dialog-custom p-4 text-center">
+            <h4 class="fw-bold text-danger mb-3">Sei sicuro?</h4>
+            <p class="text-muted small">Questa azione cancellerà tutte le squadre dal database.</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-danger w-100 fw-bold" onclick="confirmDeleteAll()">SI, ELIMINA</button>
+                <button class="btn btn-light border w-100" onclick="closeModal('deleteAllModal')">NO</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteSingleModal" class="custom-modal" style="display:none;">
+        <div class="modal-dialog-custom p-4 text-center">
+            <h4 class="fw-bold text-dark mb-3">Eliminare la squadra?</h4>
+            <p id="deleteSingleName" class="fw-bold text-primary mb-3"></p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-danger w-100 fw-bold" onclick="confirmDeleteSingle()">ELIMINA</button>
+                <button class="btn btn-light border w-100" onclick="closeModal('deleteSingleModal')">ANNULLA</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationModal" class="custom-modal" style="display:none;">
+        <div class="modal-dialog-custom p-4 text-center">
+            <div id="notificationIcon" class="mb-3 h1"></div>
+            <h4 id="notificationTitle" class="fw-bold mb-2"></h4>
+            <p id="notificationMessage" class="text-muted"></p>
+            <button class="btn btn-dark w-100 fw-bold mt-3" onclick="closeModal('notificationModal')">OK</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

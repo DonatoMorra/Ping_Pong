@@ -1,0 +1,120 @@
+:root {
+    --primary: #f59e0b; /* Amber */
+    --secondary: #ef4444; /* Red for cups */
+    --danger: #b91c1c;
+    --bg: #fffbeb; /* Light amber background */
+}
+
+body {
+    background-color: var(--bg);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #1e293b;
+}
+
+.main-card {
+    border-radius: 2rem;
+}
+
+.nav-pills .nav-link {
+    color: #64748b;
+    font-weight: 700;
+    border-radius: 12px;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--primary) !important;
+}
+
+.team-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid var(--primary);
+    border-radius: 20px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-dialog-custom {
+    background: white;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    animation: fadeInModal 0.3s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.match-registration-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+    border: none;
+}
+
+.vs-circle {
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+}
+
+.form-select-lg {
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.toast-custom {
+    min-width: 200px;
+    max-width: 300px;
+    padding: 0.8rem 1.2rem;
+    background: #1e293b;
+    color: white;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: toastSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toast-custom .h3 {
+    font-size: 1.2rem;
+}
+
+@keyframes toastSlideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.extra-small {
+    font-size: 0.75rem;
+}
+#winner-banner { animation: bannerPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes bannerPop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }

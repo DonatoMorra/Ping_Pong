@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: PingPong
+
+# Configurazione Database
+  datasource:
+    url: jdbc:mysql://db:3306/PingPong?createDatabaseIfNotExist=true
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  # Configurazione JPA / Hibernate
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8081
